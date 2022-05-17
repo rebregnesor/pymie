@@ -76,6 +76,7 @@ class Mie:
         self.P = np.zeros((self.lmax+1,*self.cos_theta.shape))
         self.dP = np.zeros((self.lmax+1,*self.cos_theta.shape))
         
+        ''' this loop is probably slow and could be optimized somehow '''
         for iy, ix in np.ndindex(self.cos_theta.shape):
             P,dP = lpmn(1,self.lmax,self.cos_theta[iy,ix])
             self.P[:,iy,ix] = P[1,:]
@@ -107,6 +108,7 @@ class Mie:
         
         
     def get_J(self,kind,derivative=False):
+        ''' returns the spherical bessel function of the first or third kind'''
         if kind == '1st':
             J = lambda l: spherical_jn(l,self.k*self.r,derivative=derivative)
         if kind == '3rd':
@@ -127,7 +129,7 @@ class Mie:
         P_l = self.P[l] 
         dP_l = self.dP[l] 
         theta_comp =  np.einsum('ajk,jk->ajk',e_theta, cos_phi/sin_theta*J(l)*P_l)
-        phi_comp = np.einsum('ajk,jk->ajk',e_phi,+J(l)*dP_l*sin_phi)
+        phi_comp = np.einsum('ajk,jk->ajk',e_phi,-J(l)*dP_l*sin_phi)
         return  theta_comp+phi_comp
     
        
@@ -152,7 +154,7 @@ class Mie:
         
         r_comp = np.einsum('ajk,jk->ajk',e_r, l*(l+1) * J(l)* P_l * cos_phi)
         theta_comp = np.einsum('ajk,jk->ajk',e_theta, der_krJ(l)*dP_l*cos_phi)
-        phi_comp = np.einsum('ajk,jk->ajk',e_phi,+1/sin_theta*der_krJ(l)*P_l*sin_phi)
+        phi_comp = np.einsum('ajk,jk->ajk',e_phi,-1/sin_theta*der_krJ(l)*P_l*sin_phi)
         return (r_comp + theta_comp + phi_comp)/(k*r)
 
     def get_Ei(self):
