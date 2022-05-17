@@ -126,9 +126,9 @@ class Mie:
         
         P_l = self.P[l] 
         dP_l = self.dP[l] 
-        r_comp =  np.einsum('ajk,jk->ajk',e_theta, cos_phi/sin_theta*J(l)*P_l)
-        theta_comp = np.einsum('ajk,jk->ajk',e_phi,+J(l)*dP_l*sin_phi)
-        return  r_comp+theta_comp
+        theta_comp =  np.einsum('ajk,jk->ajk',e_theta, cos_phi/sin_theta*J(l)*P_l)
+        phi_comp = np.einsum('ajk,jk->ajk',e_phi,+J(l)*dP_l*sin_phi)
+        return  theta_comp+phi_comp
     
        
     def Ne(self,l,kind='1st'):
