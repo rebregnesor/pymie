@@ -1,6 +1,6 @@
 # PyMie
 
-A simple implementation of the mie solution to Maxwell's equations in python.
+A simple implementation of the Mie solution to Maxwell's equations in python.
 
 The implementation and notation closely follows the Wikipedia article on Mie scattering: https://en.wikipedia.org/wiki/Mie_scattering
 
